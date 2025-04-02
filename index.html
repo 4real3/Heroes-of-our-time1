@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Герої нашого часу</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Стилі для модального вікна, адаптовані до дизайну сайту */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 50px auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border-top: 5px solid #003087; /* Синій колір шапки */
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #555;
+            transition: color 0.4s ease;
+        }
+
+        .close-btn:hover {
+            color: #ffd700; /* Жовтий колір кнопок навігації */
+        }
+
+        .modal-content h2 {
+            color: #003087;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #003087;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #0057b7;
+            box-shadow: 0 0 5px rgba(0, 87, 183, 0.3);
+            outline: none;
+        }
+
+        .form-group select {
+            appearance: none;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23333" d="M7 10l5 5 5-5z"/></svg>') no-repeat right 12px center;
+            background-size: 12px;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            display: block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffcc00);
+            color: #003087;
+            text-decoration: none;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1rem;
+            margin: 1rem auto 0;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #ffcc00, #ffd700);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+            box-shadow: none;
+        }
+
+        /* Адаптивність */
+        @media (max-width: 768px) {
+            .modal-content {
+                margin: 20px auto;
+                padding: 20px;
+                width: 95%;
+            }
+
+            .modal-content h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="fade-overlay" class="fade-overlay"></div>
+    <header>
+        <div class="container">
+            <h1>Герої нашого часу</h1>
+            <nav>
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Головна</a>
+                <a href="heroes.html" class="nav-btn"><i class="fas fa-users"></i> Герої</a>
+                <a href="add-story.html" class="nav-btn"><i class="fas fa-plus"></i> Додати історію</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <section class="hero-section">
+            <div class="container">
+                <h2>Вшануймо тих, хто змінює Україну</h2>
+                <p>Онлайн-платформа, присвячена історіям військових, волонтерів, медиків та активістів, які щодня борються за краще майбутнє.</p>
+                <a href="heroes.html" class="btn">Дізнайтесь їхні історії</a>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="container">
+                <h2>Про проєкт</h2>
+                <p>"Герої нашого часу" — це ініціатива, створена для збереження та поширення історій людей, які стали символами стійкості та самопожертви в Україні.</p>
+                <div class="stats">
+                    <div class="stat-item"><h3>100+</h3><p>Історій героїв</p></div>
+                    <div class="stat-item"><h3>4</h3><p>Категорії</p></div>
+                    <div class="stat-item"><h3>Тисячі</h3><p>Відвідувачів</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <div class="container">
+                <h2>Хто наші герої?</h2>
+                <div class="categories-grid">
+                    <div class="category-card"><img src="https://via.placeholder.com/300x200" alt="Військові"><h3>Військові</h3><p>Ті, хто захищає нашу землю від ворога.</p></div>
+                    <div class="category-card"><img src="https://via.placeholder.com/300x200" alt="Волонтери"><h3>Волонтери</h3><p>Організатори допомоги для фронту та цивільних.</p></div>
+                    <div class="category-card"><img src="https://via.placeholder.com/300x200" alt="Медики"><h3>Медики</h3><p>Рятують життя в найскладніших умовах.</p></div>
+                    <div class="category-card"><img src="https://via.placeholder.com/300x200" alt="Активісти"><h3>Активісти</h3><p>Будують майбутнє через громадські ініціативи.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Розкажи свою історію</h2>
+                <p>Знаєш героя, чиї дії надихають? Поділись його історією з нами!</p>
+                <button class="btn" id="openModalBtn">Додати історію</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальне вікно -->
+    <div id="storyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">×</span>
+            <h2>Додати історію героя</h2>
+            <form id="storyForm">
+                <div class="form-group">
+                    <label for="heroName">Ім'я героя:</label>
+                    <input type="text" id="heroName" name="heroName" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Категорія:</label>
+                    <select id="category" name="category" required>
+                        <option value="" disabled selected>Оберіть категорію</option>
+                        <option value="military">Військові</option>
+                        <option value="volunteer">Волонтери</option>
+                        <option value="medic">Медики</option>
+                        <option value="activist">Активісти</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="story">Історія:</label>
+                    <textarea id="story" name="story" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Надіслати</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Герої нашого часу</p>
+    </footer>
+
+    <script>
+        // JavaScript для модального вікна
+        const modal = document.getElementById('storyModal');
+        const openBtn = document.getElementById('openModalBtn');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const form = document.getElementById('storyForm');
+
+        // Відкрити модальне вікно
+        openBtn.onclick = function() {
+            modal.style.display = 'block';
+        }
+
+        // Закрити модальне вікно при натисканні на хрестик
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // Закрити модальне вікно при натисканні поза ним
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Обробка відправки форми
+        form.onsubmit = function(event) {
+            event.preventDefault();
+            alert('Історію надіслано! Дякуємо за ваш внесок.');
+            modal.style.display = 'none';
+            form.reset();
+        }
+    </script>
+</body>
+</html>

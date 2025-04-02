@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Додати історію - Герої нашого часу</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="fade-overlay" class="fade-overlay"></div>
+    <header>
+        <div class="container">
+            <h1>Герої нашого часу</h1>
+            <nav>
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Головна</a>
+                <a href="heroes.html" class="nav-btn"><i class="fas fa-users"></i> Герої</a>
+                <a href="add-story.html" class="nav-btn"><i class="fas fa-plus"></i> Додати історію</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <section class="form-section">
+            <div class="container">
+                <h2>Поділіться історією героя</h2>
+                <form id="story-form">
+                    <label for="hero-name">Ім’я героя:</label>
+                    <input type="text" id="hero-name" name="hero-name" required>
+
+                    <label for="hero-category">Категорія:</label>
+                    <select id="hero-category" name="hero-category" required>
+                        <option value="" disabled selected>Оберіть категорію</option>
+                        <option value="military">Військовий</option>
+                        <option value="volunteer">Волонтер</option>
+                        <option value="medic">Медик</option>
+                        <option value="activist">Активіст</option>
+                    </select>
+
+                    <label for="hero-story">Історія:</label>
+                    <textarea id="hero-story" name="hero-story" rows="5" required></textarea>
+
+                    <label for="hero-photo">Фото:</label>
+                    <input type="file" id="hero-photo" name="hero-photo" accept="image/*">
+
+                    <button type="submit" class="btn">Додати історію</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Герої нашого часу</p>
+    </footer>
+
+    <script>
+        document.getElementById('story-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Отримуємо дані з форми
+            const heroName = document.getElementById('hero-name').value;
+            const heroCategory = document.getElementById('hero-category').value;
+            const heroStory = document.getElementById('hero-story').value;
+            const heroPhoto = document.getElementById('hero-photo').files[0];
+
+            // Обробка фото (перетворюємо в base64, якщо є)
+            let photoData = null;
+            if (heroPhoto) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photoData = e.target.result;
+                    saveStory(heroName, heroCategory, heroStory, photoData);
+                };
+                reader.readAsDataURL(heroPhoto);
+            } else {
+                saveStory(heroName, heroCategory, heroStory, null);
+            }
+
+            // Функція для збереження історії
+            function saveStory(name, category, story, photo) {
+                // Отримуємо існуючі історії з localStorage або створюємо новий масив
+                let stories = JSON.parse(localStorage.getItem('heroStories')) || [];
+                
+                // Додаємо нову історію
+                const newStory = {
+                    name: name,
+                    category: category,
+                    story: story,
+                    photo: photo
+                };
+                stories.push(newStory);
+
+                // Зберігаємо в localStorage
+                localStorage.setItem('heroStories', JSON.stringify(stories));
+
+                // Повідомлення та очищення форми
+                alert('Історію успішно додано! Перейдіть на сторінку "Герої", щоб побачити її.');
+                document.getElementById('story-form').reset();
+            }
+        });
+    </script>
+</body>
+</html>

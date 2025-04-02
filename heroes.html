@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Герої - Герої нашого часу</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="fade-overlay" class="fade-overlay"></div>
+    <header>
+        <div class="container">
+            <h1>Герої нашого часу</h1>
+            <nav>
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Головна</a>
+                <a href="heroes.html" class="nav-btn"><i class="fas fa-users"></i> Герої</a>
+                <a href="add-story.html" class="nav-btn"><i class="fas fa-plus"></i> Додати історію</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <section class="heroes-section">
+            <div class="container">
+                <h2>Наші герої</h2>
+                <div class="heroes-grid" id="heroes-grid">
+                    <!-- Історії додаються динамічно -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Герої нашого часу</p>
+    </footer>
+
+    <script>
+        // Функція для відображення історій
+        function displayHeroes() {
+            const heroesGrid = document.getElementById('heroes-grid');
+            const stories = JSON.parse(localStorage.getItem('heroStories')) || [];
+
+            if (stories.length === 0) {
+                heroesGrid.innerHTML = '<p>Поки що немає доданих історій. Додайте першу!</p>';
+                return;
+            }
+
+            heroesGrid.innerHTML = ''; // Очищаємо сітку перед додаванням
+
+            stories.forEach((story, index) => {
+                const heroCard = document.createElement('div');
+                heroCard.className = 'hero-card';
+
+                // Додаємо фото, якщо є, або заглушку
+                const img = document.createElement('img');
+                img.src = story.photo || 'https://via.placeholder.com/300x200';
+                img.alt = story.name;
+                heroCard.appendChild(img);
+
+                // Додаємо ім’я
+                const name = document.createElement('h3');
+                name.textContent = story.name;
+                heroCard.appendChild(name);
+
+                // Додаємо категорію
+                const category = document.createElement('p');
+                category.innerHTML = `<strong>Категорія:</strong> ${story.category}`;
+                heroCard.appendChild(category);
+
+                // Додаємо історію
+                const storyText = document.createElement('p');
+                storyText.textContent = story.story;
+                heroCard.appendChild(storyText);
+
+                // Додаємо кнопку видалення
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn-small delete-btn';
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Видалити';
+                deleteBtn.onclick = function() {
+                    deleteStory(index);
+                };
+                heroCard.appendChild(deleteBtn);
+
+                // Додаємо картку в сітку
+                heroesGrid.appendChild(heroCard);
+            });
+        }
+
+        // Функція для видалення історії
+        function deleteStory(index) {
+            if (confirm('Ви впевнені, що хочете видалити цю історію?')) {
+                let stories = JSON.parse(localStorage.getItem('heroStories')) || [];
+                stories.splice(index, 1); // Видаляємо історію за індексом
+                localStorage.setItem('heroStories', JSON.stringify(stories)); // Оновлюємо localStorage
+                displayHeroes(); // Перезавантажуємо список героїв
+            }
+        }
+
+        // Викликаємо функцію при завантаженні сторінки
+        window.onload = displayHeroes;
+    </script>
+</body>
+</html>
